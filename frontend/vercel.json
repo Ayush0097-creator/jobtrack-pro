@@ -2,5 +2,18 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://jobtrack-pro-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/media/:path*",
+      "destination": "https://jobtrack-pro-api.onrender.com/media/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

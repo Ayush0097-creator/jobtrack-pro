@@ -1,0 +1,29 @@
+databases:
+  - name: jobtrack-db
+    plan: free
+
+services:
+  - type: web
+    name: jobtrack-pro-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.10"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jobtrack-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: ".onrender.com,jobtrack-pro-api.onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://jobtrack-pro-amber.vercel.app,https://jobtrack-pro-team-ayush2.vercel.app"
+      - key: FRONTEND_URL
+        value: "https://jobtrack-pro-amber.vercel.app"

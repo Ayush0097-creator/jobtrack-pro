@@ -107,6 +107,14 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if o.strip()
+]
+if not CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS = [o for o in CORS_ALLOWED_ORIGINS if o.startswith("http")]
+
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 EMAIL_BACKEND = os.getenv(
