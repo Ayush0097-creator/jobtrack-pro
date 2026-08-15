@@ -131,10 +131,11 @@ export default function PlacementCompanies() {
   const qc = useQueryClient()
   const [modal, setModal] = useState(null) // null | 'create' | company obj
 
-  const { data: companies = [], isLoading } = useQuery({
+  const { data: companiesData, isLoading } = useQuery({
     queryKey: ['placement-companies'],
     queryFn: async () => (await api.get('/placements/companies/')).data,
   })
+  const companies = companiesData?.results || (Array.isArray(companiesData) ? companiesData : [])
 
   const saveMut = useMutation({
     mutationFn: (payload) => modal?.id

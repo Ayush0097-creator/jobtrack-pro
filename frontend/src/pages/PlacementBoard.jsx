@@ -15,10 +15,11 @@ const STATUS_STYLES = {
 export default function PlacementBoard() {
   const qc = useQueryClient()
 
-  const { data: companies = [], isLoading } = useQuery({
+  const { data: companiesRaw, isLoading } = useQuery({
     queryKey: ['my-eligible-companies'],
     queryFn: async () => (await api.get('/placements/my/eligible-companies/')).data,
   })
+  const companies = companiesRaw?.results || (Array.isArray(companiesRaw) ? companiesRaw : [])
 
   const applyMut = useMutation({
     mutationFn: (companyId) => api.post('/placements/my/applications/', { company: companyId }),

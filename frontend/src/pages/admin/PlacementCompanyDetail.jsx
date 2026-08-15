@@ -30,17 +30,19 @@ export default function PlacementCompanyDetail() {
     queryKey: ['all-students'],
     queryFn: async () => (await api.get('/auth/admin/users/?role=student')).data,
   })
-  const allStudents = allStudentsRaw?.results || allStudentsRaw || []
+  const allStudents = allStudentsRaw?.results || (Array.isArray(allStudentsRaw) ? allStudentsRaw : [])
 
-  const { data: eligible = [], isLoading: loadingEligible } = useQuery({
+  const { data: eligibleRaw, isLoading: loadingEligible } = useQuery({
     queryKey: ['eligible-students', id],
     queryFn: async () => (await api.get(`/placements/eligible-students/?company=${id}`)).data,
   })
+  const eligible = eligibleRaw?.results || (Array.isArray(eligibleRaw) ? eligibleRaw : [])
 
-  const { data: applications = [], isLoading: loadingApps } = useQuery({
+  const { data: applicationsRaw, isLoading: loadingApps } = useQuery({
     queryKey: ['placement-apps', id],
     queryFn: async () => (await api.get(`/placements/admin/applications/?company=${id}`)).data,
   })
+  const applications = applicationsRaw?.results || (Array.isArray(applicationsRaw) ? applicationsRaw : [])
 
   const addEligibleMut = useMutation({
     mutationFn: (studentId) => api.post('/placements/eligible-students/', {

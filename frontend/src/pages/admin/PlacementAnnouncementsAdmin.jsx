@@ -76,15 +76,17 @@ export default function PlacementAnnouncementsAdmin() {
   const [modal, setModal] = useState(null)
   const [filterCat, setFilterCat] = useState('')
 
-  const { data: announcements = [], isLoading } = useQuery({
+  const { data: announcementsData, isLoading } = useQuery({
     queryKey: ['admin-announcements'],
     queryFn: async () => (await api.get('/placements/admin/announcements/')).data,
   })
+  const announcements = announcementsData?.results || (Array.isArray(announcementsData) ? announcementsData : [])
 
-  const { data: companies = [] } = useQuery({
+  const { data: companiesData } = useQuery({
     queryKey: ['placement-companies'],
     queryFn: async () => (await api.get('/placements/companies/')).data,
   })
+  const companies = companiesData?.results || (Array.isArray(companiesData) ? companiesData : [])
 
   const saveMut = useMutation({
     mutationFn: (payload) => modal?.id

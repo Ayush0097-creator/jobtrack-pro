@@ -32,13 +32,14 @@ const CATEGORY_ICONS = {
 export default function PlacementAnnouncements() {
   const [filterCat, setFilterCat] = useState('')
 
-  const { data: announcements = [], isLoading } = useQuery({
+  const { data: announcementsRaw, isLoading } = useQuery({
     queryKey: ['placement-announcements', filterCat],
     queryFn: async () => {
       const params = filterCat ? `?category=${filterCat}` : ''
       return (await api.get(`/placements/announcements/${params}`)).data
     },
   })
+  const announcements = announcementsRaw?.results || (Array.isArray(announcementsRaw) ? announcementsRaw : [])
 
   return (
     <div className="space-y-6">
