@@ -137,13 +137,21 @@ def _call_llm(prompt: str, system: str = "You are a career coach and ATS expert.
             )
             return resp.choices[0].message.content
         if settings.GEMINI_API_KEY:
-            import google.generativeai as genai
+            from google import genai
+            from google.genai import types
 
-            genai.configure(api_key=settings.GEMINI_API_KEY)
-            model = genai.GenerativeModel(settings.GEMINI_MODEL)
-            result = model.generate_content(f"{system}\n\n{prompt}")
-            return result.text
-    except Exception:
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
+            response = client.models.generate_content(
+                model=settings.GEMINI_MODEL,
+                contents=f"{system}\n\n{prompt}",
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                ),
+            )
+            return response.text
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning("LLM call failed: %s", e)
         return None
     return None
 
