@@ -12,6 +12,7 @@ urlpatterns = [
     path("api/ai/", include("ai_engine.urls")),
     path("api/notifications/", include("notifications.urls")),
     path("api/analytics/", include("applications.analytics_urls")),
+    path("api/placements/", include("placements.urls")),
 ]
 
 if settings.DEBUG:

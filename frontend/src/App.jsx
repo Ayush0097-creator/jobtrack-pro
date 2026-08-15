@@ -24,6 +24,12 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminApplications from './pages/admin/AdminApplications'
 import AdminAIUsage from './pages/admin/AdminAIUsage'
+import PlacementDashboard from './pages/admin/PlacementDashboard'
+import PlacementCompanies from './pages/admin/PlacementCompanies'
+import PlacementCompanyDetail from './pages/admin/PlacementCompanyDetail'
+import PlacementAnnouncementsAdmin from './pages/admin/PlacementAnnouncementsAdmin'
+import PlacementBoard from './pages/PlacementBoard'
+import PlacementAnnouncements from './pages/PlacementAnnouncements'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +68,8 @@ export default function App() {
               <Route path="/app/coach" element={<Coach />} />
               <Route path="/app/profile" element={<Profile />} />
               <Route path="/app/notifications" element={<Notifications />} />
+              <Route path="/app/placements" element={<PlacementBoard />} />
+              <Route path="/app/placement-announcements" element={<PlacementAnnouncements />} />
               {/* legacy redirects */}
               <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
               <Route path="/applications" element={<Navigate to="/app/applications" replace />} />
@@ -79,6 +87,11 @@ export default function App() {
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/applications" element={<AdminApplications />} />
               <Route path="/admin/ai-usage" element={<AdminAIUsage />} />
+              {/* Placement Management */}
+              <Route path="/admin/placement-dashboard" element={<PlacementDashboard />} />
+              <Route path="/admin/placements" element={<PlacementCompanies />} />
+              <Route path="/admin/placements/:id" element={<PlacementCompanyDetail />} />
+              <Route path="/admin/placement-announcements" element={<PlacementAnnouncementsAdmin />} />
               <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             </Route>
 

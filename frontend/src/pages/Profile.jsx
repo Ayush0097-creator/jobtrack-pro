@@ -17,6 +17,12 @@ export default function Profile() {
       reset({
         full_name: user.full_name || '',
         phone: user.phone || '',
+        college: user.college || '',
+        branch: user.branch || '',
+        roll_number: user.roll_number || '',
+        graduation_year: user.graduation_year || '',
+        cgpa: user.cgpa ?? '',
+        backlogs: user.backlogs ?? 0,
         linkedin_url: user.linkedin_url || '',
         github_url: user.github_url || '',
         portfolio_url: user.portfolio_url || '',
@@ -53,6 +59,9 @@ export default function Profile() {
           onSubmit={handleSubmit((v) =>
             saveMut.mutate({
               ...v,
+              cgpa: v.cgpa !== '' && v.cgpa !== null ? parseFloat(v.cgpa) : null,
+              graduation_year: v.graduation_year !== '' && v.graduation_year !== null ? parseInt(v.graduation_year) : null,
+              backlogs: parseInt(v.backlogs) || 0,
               skills: v.skills
                 ? v.skills.split(',').map((s) => s.trim()).filter(Boolean)
                 : [],
@@ -66,6 +75,34 @@ export default function Profile() {
           <div>
             <label className="label">Email</label>
             <input className="input" value={user?.email || ''} disabled />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="label">College / Institution</label>
+              <input className="input" placeholder="e.g. IIT / NIT / University" {...register('college')} />
+            </div>
+            <div>
+              <label className="label">Branch / Department</label>
+              <input className="input" placeholder="e.g. CSE, ECE, IT" {...register('branch')} />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="label">Roll Number</label>
+              <input className="input" placeholder="e.g. 21BCS045" {...register('roll_number')} />
+            </div>
+            <div>
+              <label className="label">Graduation Year</label>
+              <input className="input" type="number" placeholder="2025" {...register('graduation_year')} />
+            </div>
+            <div>
+              <label className="label">CGPA / GPA</label>
+              <input className="input" type="number" step="0.01" min="0" max="10" placeholder="8.5" {...register('cgpa')} />
+            </div>
+          </div>
+          <div>
+            <label className="label">Active Backlogs (0 = none)</label>
+            <input className="input" type="number" min="0" {...register('backlogs')} />
           </div>
           <div>
             <label className="label">Phone</label>
@@ -84,7 +121,7 @@ export default function Profile() {
             <input className="input" {...register('portfolio_url')} />
           </div>
           <div>
-            <label className="label">Education</label>
+            <label className="label">Education Notes</label>
             <textarea className="input" {...register('education')} />
           </div>
           <div>

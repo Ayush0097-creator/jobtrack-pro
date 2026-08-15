@@ -18,6 +18,13 @@ class User(AbstractUser):
     education = models.TextField(blank=True)
     is_email_verified = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    # Placement profile fields
+    college = models.CharField(max_length=200, blank=True)
+    branch = models.CharField(max_length=100, blank=True)
+    roll_number = models.CharField(max_length=50, blank=True)
+    graduation_year = models.IntegerField(null=True, blank=True)
+    cgpa = models.FloatField(null=True, blank=True)
+    backlogs = models.IntegerField(default=0)
     role = models.CharField(
         max_length=20,
         choices=UserRole.choices,

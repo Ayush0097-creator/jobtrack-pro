@@ -48,6 +48,7 @@ export default function AdminUsers() {
             <thead className="bg-white/5 text-xs uppercase tracking-wide text-mist-400">
               <tr>
                 <th className="px-4 py-3">User</th>
+                <th className="px-4 py-3">Academic Info</th>
                 <th className="px-4 py-3">Role</th>
                 <th className="px-4 py-3">Apps</th>
                 <th className="px-4 py-3">Status</th>
@@ -60,6 +61,25 @@ export default function AdminUsers() {
                   <td className="px-4 py-3">
                     <p className="font-medium text-white">{u.full_name || u.username}</p>
                     <p className="text-xs text-mist-400">{u.email}</p>
+                    {u.college && <p className="text-[11px] text-mist-500">{u.college}</p>}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-mist-300">
+                    {u.branch ? (
+                      <div>
+                        <span className="font-semibold text-white">{u.branch}</span>
+                        {u.graduation_year && <span> · Batch {u.graduation_year}</span>}
+                        <div>
+                          <span>CGPA: <span className="text-sky-300 font-mono">{u.cgpa ?? 'N/A'}</span></span>
+                          {u.backlogs !== undefined && (
+                            <span className={u.backlogs > 0 ? 'text-amber-400 ml-2' : 'text-mist-400 ml-2'}>
+                              · {u.backlogs} backlogs
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-mist-500 italic">Not set</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 capitalize text-mist-200">{u.role}</td>
                   <td className="px-4 py-3 font-mono text-sky-300">{u.application_count ?? '—'}</td>

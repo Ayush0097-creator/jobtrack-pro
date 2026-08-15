@@ -6,6 +6,9 @@ import {
   Sparkles,
   LogOut,
   Shield,
+  Building2,
+  Megaphone,
+  GraduationCap,
 } from 'lucide-react'
 import { useAuth } from '../../api/auth'
 import { cn } from '../../lib/utils'
@@ -15,6 +18,12 @@ const nav = [
   { to: '/admin/users', label: 'Students & Users', icon: Users },
   { to: '/admin/applications', label: 'All Applications', icon: Briefcase },
   { to: '/admin/ai-usage', label: 'AI Usage', icon: Sparkles },
+]
+
+const placementNav = [
+  { to: '/admin/placement-dashboard', label: 'Placement Overview', icon: GraduationCap },
+  { to: '/admin/placements', label: 'Companies', icon: Building2 },
+  { to: '/admin/placement-announcements', label: 'Announcements', icon: Megaphone },
 ]
 
 export default function AdminShell({ children }) {
@@ -42,8 +51,28 @@ export default function AdminShell({ children }) {
             </div>
           </div>
 
-          <nav className="flex flex-1 flex-col gap-1">
+          <nav className="flex flex-1 flex-col gap-1 overflow-y-auto pr-1">
+            <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-mist-400">Core</p>
             {nav.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition',
+                    isActive
+                      ? 'bg-sky-500/15 text-sky-300'
+                      : 'text-mist-300 hover:bg-white/5 hover:text-white'
+                  )
+                }
+              >
+                <item.icon size={18} />
+                {item.label}
+              </NavLink>
+            ))}
+
+            <p className="px-3 pt-4 pb-1 text-[10px] font-semibold uppercase tracking-wider text-sky-400">Placement Hub</p>
+            {placementNav.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -94,7 +123,7 @@ export default function AdminShell({ children }) {
             </button>
           </header>
           <nav className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 lg:hidden">
-            {nav.map((item) => (
+            {[...nav, ...placementNav].map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}

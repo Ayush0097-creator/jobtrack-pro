@@ -11,6 +11,8 @@ import {
   Settings,
   LogOut,
   GraduationCap,
+  Building2,
+  Megaphone,
 } from 'lucide-react'
 import { useAuth } from '../../api/auth'
 import { cn } from '../../lib/utils'
@@ -19,6 +21,8 @@ import api from '../../api/client'
 
 const nav = [
   { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/app/placements', label: 'Campus Drives', icon: Building2 },
+  { to: '/app/placement-announcements', label: 'Announcements', icon: Megaphone },
   { to: '/app/applications', label: 'Applications', icon: Briefcase },
   { to: '/app/board', label: 'Kanban', icon: KanbanSquare },
   { to: '/app/interviews', label: 'Interviews', icon: CalendarDays },
