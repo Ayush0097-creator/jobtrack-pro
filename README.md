@@ -38,7 +38,7 @@ AI-powered job application management system designed for students and job seeke
 ```bash
 cp .env.example .env
 # Optional: Set GEMINI_API_KEY or OPENAI_API_KEY
-[9:31 pm, 15/08/2026] Mridul: cd backend
+ cd backend
 python -m venv .venv
 
 # Activate virtual environment (Windows)
@@ -54,10 +54,10 @@ python manage.py migrate
 # Create admin user and run server
 python manage.py createsuperuser
 python manage.py runserver
-[9:32 pm, 15/08/2026] Mridul: cd frontend
+cd frontend
 npm install
 npm run dev
-[9:32 pm, 15/08/2026] Mridul: jobtrack-pro/
+jobtrack-pro/
 ├── backend/          # Django project (config + apps)
 ├── frontend/         # Vite React app
 └── .env.example      # Shared environment template
