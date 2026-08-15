@@ -25,14 +25,15 @@ export function StatCard({ label, value, suffix = '', hint }) {
   )
 }
 
-export function PageHeader({ title, subtitle, actions }) {
+export function PageHeader({ title, subtitle, actions, action }) {
+  const actionContent = actions || action
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 className="font-display text-3xl font-semibold tracking-tight text-white">{title}</h1>
         {subtitle && <p className="mt-1 text-mist-300">{subtitle}</p>}
       </div>
-      {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
+      {actionContent && <div className="flex flex-wrap gap-2">{actionContent}</div>}
     </div>
   )
 }
@@ -41,11 +42,11 @@ export function Skeleton({ className = 'h-24' }) {
   return <div className={`animate-pulse rounded-2xl bg-white/5 ${className}`} />
 }
 
-export function EmptyState({ title, description, action }) {
+export function EmptyState({ title, description, message, action }) {
   return (
     <div className="glass-card flex flex-col items-center justify-center px-6 py-16 text-center">
       <p className="font-display text-xl text-white">{title}</p>
-      <p className="mt-2 max-w-md text-sm text-mist-400">{description}</p>
+      <p className="mt-2 max-w-md text-sm text-mist-400">{description || message}</p>
       {action && <div className="mt-6">{action}</div>}
     </div>
   )

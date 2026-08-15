@@ -191,7 +191,11 @@ class AdminUserListView(generics.ListAPIView):
     def get_queryset(self):
         from django.db.models import Count
 
-        return User.objects.annotate(application_count=Count("applications")).order_by("-date_joined")
+        qs = User.objects.annotate(application_count=Count("applications")).order_by("-date_joined")
+        role = self.request.query_params.get("role")
+        if role:
+            qs = qs.filter(role=role)
+        return qs
 
 
 class AdminUserDetailView(generics.RetrieveUpdateAPIView):

@@ -26,10 +26,11 @@ export default function PlacementCompanyDetail() {
     queryFn: async () => (await api.get(`/placements/companies/${id}/`)).data,
   })
 
-  const { data: allStudents = [] } = useQuery({
+  const { data: allStudentsRaw = [] } = useQuery({
     queryKey: ['all-students'],
     queryFn: async () => (await api.get('/auth/admin/users/?role=student')).data,
   })
+  const allStudents = allStudentsRaw?.results || allStudentsRaw || []
 
   const { data: eligible = [], isLoading: loadingEligible } = useQuery({
     queryKey: ['eligible-students', id],
