@@ -1,4 +1,4 @@
-[9:31 pm, 15/08/2026] Mridul: # 🚀 JobTrack Pro
+ # 🚀 JobTrack Pro
 
 AI-powered job application management system designed for students and job seekers. Track applications, manage resumes, prepare for interviews, and analyze your placement progress all in one place.
 
