@@ -27,3 +27,9 @@ services:
         value: "https://jobtrack-pro-amber.vercel.app,https://jobtrack-pro-team-ayush2.vercel.app"
       - key: FRONTEND_URL
         value: "https://jobtrack-pro-amber.vercel.app"
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: "admin@jobtrackpro.com"
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: "Admin@12345"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: "admin"
