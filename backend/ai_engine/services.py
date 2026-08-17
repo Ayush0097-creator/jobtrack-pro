@@ -120,9 +120,42 @@ def _heuristic_resume_analysis(text: str) -> dict[str, Any]:
     }
 
 
+def _active_ai_provider() -> str:
+    provider = (settings.AI_PROVIDER or "").lower()
+    if provider == "openrouter" and settings.OPENROUTER_API_KEY:
+        return "openrouter"
+    if provider == "openai" and settings.OPENAI_API_KEY:
+        return "openai"
+    if provider == "gemini" and settings.GEMINI_API_KEY:
+        return "gemini"
+    if settings.OPENROUTER_API_KEY:
+        return "openrouter"
+    if settings.OPENAI_API_KEY:
+        return "openai"
+    if settings.GEMINI_API_KEY:
+        return "gemini"
+    return "heuristic"
+
+
 def _call_llm(prompt: str, system: str = "You are a career coach and ATS expert. Respond in JSON only.") -> Optional[str]:
-    provider = settings.AI_PROVIDER
+    provider = _active_ai_provider()
     try:
+        if provider == "openrouter" and settings.OPENROUTER_API_KEY:
+            from openai import OpenAI
+
+            client = OpenAI(
+                api_key=settings.OPENROUTER_API_KEY,
+                base_url="https://openrouter.ai/api/v1",
+            )
+            resp = client.chat.completions.create(
+                model=getattr(settings, "OPENROUTER_MODEL", "liquid/lfm-2.5-2.6b:free"),
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.3,
+            )
+            return resp.choices[0].message.content
         if provider == "openai" and settings.OPENAI_API_KEY:
             from openai import OpenAI
 
@@ -136,7 +169,7 @@ def _call_llm(prompt: str, system: str = "You are a career coach and ATS expert.
                 temperature=0.3,
             )
             return resp.choices[0].message.content
-        if settings.GEMINI_API_KEY:
+        if provider == "gemini" and settings.GEMINI_API_KEY:
             from google import genai
             from google.genai import types
 
@@ -176,7 +209,7 @@ def _parse_json_response(text: str) -> Optional[dict]:
 
 
 def analyze_resume(text: str, user=None) -> dict[str, Any]:
-    provider = settings.AI_PROVIDER if (settings.GEMINI_API_KEY or settings.OPENAI_API_KEY) else "heuristic"
+    provider = _active_ai_provider()
     if provider != "heuristic":
         prompt = f"""Analyze this resume for ATS readiness. Return JSON with keys:
 ats_score (0-100), strength_score (0-100), strengths (array), weaknesses (array),
@@ -207,7 +240,7 @@ def compute_job_match(resume_text: str, job_description: str, user=None) -> dict
     missing = [s for s in jd_skills if s.lower() not in resume_set]
     score = round((len(matched) / len(jd_skills)) * 100, 1) if jd_skills else 50.0
 
-    provider = settings.AI_PROVIDER if (settings.GEMINI_API_KEY or settings.OPENAI_API_KEY) else "heuristic"
+    provider = _active_ai_provider()
     recommendations = [f"Learn {s} basics" for s in missing[:3]]
     if not recommendations:
         recommendations = ["Tailor your summary to emphasize matched skills"]
@@ -242,7 +275,7 @@ JD:
 
 
 def generate_cover_letter(resume_text: str, job_description: str, company: str, position: str, user=None) -> str:
-    provider = settings.AI_PROVIDER if (settings.GEMINI_API_KEY or settings.OPENAI_API_KEY) else "heuristic"
+    provider = _active_ai_provider()
     if provider != "heuristic":
         prompt = f"""Write a professional cover letter (no JSON). Company: {company}. Position: {position}.
 Resume excerpt:
@@ -275,7 +308,7 @@ Sincerely,
 
 
 def career_coach_reply(message: str, context: str = "", user=None) -> str:
-    provider = settings.AI_PROVIDER if (settings.GEMINI_API_KEY or settings.OPENAI_API_KEY) else "heuristic"
+    provider = _active_ai_provider()
     if provider != "heuristic":
         prompt = f"Context:\n{context[:4000]}\n\nUser question:\n{message}"
         raw = _call_llm(prompt, system="You are JobTrack Pro AI Career Coach. Be practical and concise. Plain text.")
@@ -303,7 +336,7 @@ def career_coach_reply(message: str, context: str = "", user=None) -> str:
 
 
 def generate_interview_prep(company: str, role: str, user=None) -> dict[str, Any]:
-    provider = settings.AI_PROVIDER if (settings.GEMINI_API_KEY or settings.OPENAI_API_KEY) else "heuristic"
+    provider = _active_ai_provider()
     if provider != "heuristic":
         prompt = f"""Generate interview prep for {role} at {company}. Return JSON with keys:
 dsa_questions (array of strings), hr_questions (array), technical_questions (array).
